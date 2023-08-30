@@ -4,6 +4,7 @@ import 'package:news_app/helper/data.dart';
 import 'package:news_app/helper/news.dart';
 import 'package:news_app/models/article_model.dart';
 import 'package:news_app/models/category_model.dart';
+import 'package:news_app/views/article_view.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -82,6 +83,7 @@ class _HomeState extends State<Home> {
                         physics: ClampingScrollPhysics(),
                         itemBuilder: (context, index) {
                           return BlogTile(
+                              url: articles[index].url,
                               imageUrl: articles[index].urlToImage,
                               title: articles[index].title,
                               desc: articles[index].description);
@@ -135,34 +137,48 @@ class CategoryTile extends StatelessWidget {
 }
 
 class BlogTile extends StatelessWidget {
-  final String imageUrl, title, desc;
-  BlogTile({required this.imageUrl, required this.title, required this.desc});
+  final String imageUrl, title, desc, url;
+  BlogTile(
+      {required this.imageUrl,
+      required this.title,
+      required this.desc,
+      required this.url});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 10),
-      child: Column(
-        children: [
-          ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.network(imageUrl)),
-          SizedBox(height: 8),
-          Text(
-            title,
-            style: TextStyle(
-                fontSize: 18,
-                color: Colors.black87,
-                fontWeight: FontWeight.w500),
-          ),
-          SizedBox(
-            height: 8,
-          ),
-          Text(
-            desc,
-            style: TextStyle(color: Colors.black54),
-          ),
-        ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ArticleView(
+                      blogUrl: url,
+                    )));
+      },
+      child: Container(
+        margin: EdgeInsets.only(bottom: 16),
+        child: Column(
+          children: [
+            ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.network(imageUrl)),
+            SizedBox(height: 8),
+            Text(
+              title,
+              style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.black87,
+                  fontWeight: FontWeight.w500),
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            Text(
+              desc,
+              style: TextStyle(color: Colors.black54),
+            ),
+          ],
+        ),
       ),
     );
   }
