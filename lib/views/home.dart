@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/helper/data.dart';
 import 'package:news_app/helper/news.dart';
@@ -78,6 +79,7 @@ class _HomeState extends State<Home> {
                     child: ListView.builder(
                         itemCount: articles.length,
                         shrinkWrap: true,
+                        physics: ClampingScrollPhysics(),
                         itemBuilder: (context, index) {
                           return BlogTile(
                               imageUrl: articles[index].urlToImage,
@@ -106,8 +108,11 @@ class CategoryTile extends StatelessWidget {
           children: <Widget>[
             ClipRRect(
                 borderRadius: BorderRadius.circular(6),
-                child: Image.network(imageUrl,
-                    width: 120, height: 60, fit: BoxFit.cover)),
+                child: CachedNetworkImage(
+                    imageUrl: imageUrl,
+                    width: 120,
+                    height: 60,
+                    fit: BoxFit.cover)),
             Container(
               alignment: Alignment.center,
               width: 120,
@@ -136,8 +141,29 @@ class BlogTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child:
-          Column(children: [Image.network(imageUrl), Text(title), Text(desc)]),
+      margin: EdgeInsets.only(bottom: 10),
+      child: Column(
+        children: [
+          ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.network(imageUrl)),
+          SizedBox(height: 8),
+          Text(
+            title,
+            style: TextStyle(
+                fontSize: 18,
+                color: Colors.black87,
+                fontWeight: FontWeight.w500),
+          ),
+          SizedBox(
+            height: 8,
+          ),
+          Text(
+            desc,
+            style: TextStyle(color: Colors.black54),
+          ),
+        ],
+      ),
     );
   }
 }
